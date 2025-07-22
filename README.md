@@ -1,4 +1,4 @@
-# Dashboard de Monitoramento de APIs em Tempo Real
+# API Radar
 
 Um projeto full-stack em TypeScript para monitorar saúde e performance de APIs externas, com atualizações em tempo real por WebSockets.
 
