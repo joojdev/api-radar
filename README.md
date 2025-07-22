@@ -35,5 +35,3 @@ Este dashboard recolhe métricas (latência, status, tempo de resposta) de múlt
 ## 📄 Licença
 
 MIT © [joojdev](https://github.com/joojdev)
-
-```
