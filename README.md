@@ -11,10 +11,10 @@ Este dashboard recolhe métricas (latência, status, tempo de resposta) de múlt
 ### 🛠 Tecnologias
 
 - **Frontend**
-  - React (Vite + TypeScript)
+  - React (Vite)
   - Chart.js
 - **Backend**
-  - Fastify (TypeScript)
+  - Fastify
   - Socket.IO
   - Prisma ORM
 - **Banco de Dados**
