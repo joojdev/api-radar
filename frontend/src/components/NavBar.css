@@ -1,0 +1,36 @@
+nav {
+  background: rgb(128, 128, 214);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 50px;
+}
+
+nav > button {
+  width: 70px;
+  height: 70px;
+  color: white;
+  background: rgb(100, 173, 112);
+  border-radius: 15px;
+  border: none;
+  font-size: 2em;
+  box-shadow: 0 5px 10px #33333350;
+  cursor: pointer;
+  transition: .1s;
+  border: 1px rgb(116, 194, 129) solid;
+}
+
+nav > button:hover {
+  background: rgb(95, 151, 104);
+  border: 1px rgb(112, 170, 121) solid;
+}
+
+nav > button:active {
+  box-shadow: none;
+}
+
+nav > h1 {
+  color: white;
+  font-size: 2.5em;
+  font-family: 'Special Gothic Expanded One', Arial, Helvetica, sans-serif;
+}
