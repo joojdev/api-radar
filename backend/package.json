@@ -7,7 +7,6 @@
     "format": "prettier --write ."
   },
   "author": "joojdev",
-  "license": "ISC",
   "type": "commonjs",
   "dependencies": {
     "@fastify/autoload": "^6.3.1",

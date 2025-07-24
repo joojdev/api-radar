@@ -1,11 +1,16 @@
 import { FastifyPluginAsync } from "fastify";
-import { z } from 'zod';
+import { z } from "zod";
 import { Prisma } from "../../generated/prisma";
 
 const CreateApiSchema = z.object({
-  domain: z.url('Invalid domain URL!'),
-  endpoint: z.string().regex(/^\/[A-Za-z0-9_\-\/]*$/, "Endpoint must start with '/' and contain only letters, numbers, '-', '_' or '/'."),
-  accessInterval: z.coerce.number()
+  domain: z.url("Invalid domain URL!"),
+  endpoint: z
+    .string()
+    .regex(
+      /^\/[A-Za-z0-9_\-\/]*$/,
+      "Endpoint must start with '/' and contain only letters, numbers, '-', '_' or '/'.",
+    ),
+  accessInterval: z.coerce.number(),
 });
 
 const apisRoutes: FastifyPluginAsync = async (app) => {
@@ -22,13 +27,18 @@ const apisRoutes: FastifyPluginAsync = async (app) => {
 
     try {
       const api = await app.prisma.api.create({
-        data: parsed.data
+        data: parsed.data,
       });
 
       return response.code(201).send(api);
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-        return response.badRequest('There is an API with that domain and endpoint already.');
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002"
+      ) {
+        return response.badRequest(
+          "There is an API with that domain and endpoint already.",
+        );
       }
       throw error;
     }

@@ -1,0 +1,32 @@
+.collapsedSidebar {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  background: rgb(166, 176, 228);
+  height: 100%;
+  padding: 15px;
+  gap: 5px;
+}
+
+.collapsedSidebar > li {
+  color: white;
+  font-size: 1.4em;
+  padding: 5px;
+  border-radius: 5px;
+  transition: .1s;
+  user-select: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+}
+
+.collapsedSidebar > li:hover {
+  background: rgb(145, 154, 199);
+}
+
+.collapsedSidebar > li:active {
+  transform: scale(0.9);
+}
