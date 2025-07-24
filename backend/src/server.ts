@@ -5,6 +5,7 @@ import sensible from "@fastify/sensible";
 import prismaPlugin from "./plugins/prisma";
 import path from "path";
 import Autoload from "@fastify/autoload";
+import cors from '@fastify/cors';
 
 const EnvSchema = z.object({
   PORT: z.coerce.number(),
@@ -17,6 +18,9 @@ const buildServer = () => {
 
   app.register(sensible);
   app.register(prismaPlugin);
+  app.register(cors, {
+    origin: '*'
+  })
 
   app.register(Autoload, {
     dir: path.join(__dirname, "routes"),
