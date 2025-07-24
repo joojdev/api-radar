@@ -3,8 +3,9 @@ import BlackScreen from "./BlackScreen";
 import './NewApiPrompt.css';
 import { useAppContext, Popup } from "../hooks/useAppContext";
 import { useState } from "react";
-import { ProtocolEnum, type Protocol } from "../api";
+import { createApi, fetchApiList, ProtocolEnum, type Api, type Protocol } from "../api";
 import { z } from 'zod';
+import { toast } from 'react-toastify';
 
 const CreateApiSchema = z.object({
   protocol: z
@@ -27,17 +28,17 @@ const CreateApiSchema = z.object({
 type CreateApiInput = z.infer<typeof CreateApiSchema>;
 
 export default function NewApiPrompt() {
-  const { setCurrentPopup } = useAppContext();
-  const [protocol, setProtocol] = useState<Protocol>(undefined);
+  const { setCurrentPopup, setApiList } = useAppContext();
+  const [protocol, setProtocol] = useState<Protocol>(null);
   const [domain, setDomain] = useState<string>('');
   const [endpoint, setEndpoint] = useState<string>('');
   const [accessInterval, setAccessInterval] = useState<number>(5);
   const [errors, setErrors] = useState<Partial<Record<keyof CreateApiInput, string>>>({});
 
-  function handleSubmit(event: React.FormEvent) {
+  async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
-    const data = { protocol, domain, endpoint, accessInterval };
+    const data: Api = { protocol, domain, endpoint, accessInterval };
     const result = CreateApiSchema.safeParse(data);
 
     if (!result.success) {
@@ -50,8 +51,18 @@ export default function NewApiPrompt() {
       return;
     }
 
-    setErrors({});
-    handleClose();
+    try {
+      await createApi(data);
+      toast.success('API created successfully!')
+      setErrors({});
+      handleClose();
+
+      const list = await fetchApiList();
+      setApiList(list);
+    } catch (error: any) {
+      const message = error.response?.data?.message || 'There was an error!';
+      toast.error(message);
+    }
   }
 
   function handleClose() {

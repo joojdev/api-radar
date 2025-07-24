@@ -5,11 +5,11 @@ export enum ProtocolEnum {
   HTTPS = 'https'
 };
 
-export type Protocol = ProtocolEnum | undefined;
+export type Protocol = ProtocolEnum | null;
 
 export type Api = {
-  id: number;
-  protocol: string;
+  id?: number;
+  protocol: Protocol;
   domain: string;
   endpoint: string;
   accessInterval: number;
@@ -22,5 +22,10 @@ const api = axios.create({
 
 export const fetchApiList = async (): Promise<Api[]> => {
   const response = await api.get<Api[]>('/apis');
+  return response.data;
+};
+
+export const createApi = async (apiData: Api): Promise<Api> => {
+  const response = await api.post<Api>('/api', apiData);
   return response.data;
 };
