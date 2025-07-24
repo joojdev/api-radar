@@ -3,18 +3,17 @@ import { z } from "zod";
 import { Prisma } from "../../generated/prisma";
 
 enum Protocol {
-  HTTP = 'http',
-  HTTPS = 'https'
-};
+  HTTP = "http",
+  HTTPS = "https",
+}
 
 const CreateApiSchema = z.object({
-  protocol: z
-    .enum(Protocol),
+  protocol: z.enum(Protocol),
   domain: z
     .string()
     .regex(
       /^(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,}$/,
-      "Must be a valid domain."
+      "Must be a valid domain.",
     ),
   endpoint: z
     .string()
@@ -34,7 +33,7 @@ const apisRoutes: FastifyPluginAsync = async (app) => {
     const parsed = CreateApiSchema.safeParse(request.body);
 
     if (!parsed.success) {
-      return response.badRequest(parsed.error.message);
+      return response.badRequest(parsed.error.issues.map((error) => error.message).join('\n'));
     }
 
     try {
@@ -49,7 +48,7 @@ const apisRoutes: FastifyPluginAsync = async (app) => {
         error.code === "P2002"
       ) {
         return response.badRequest(
-          "There is an API with that domain and endpoint already.",
+          "There is an API with that protocol, domain and endpoint already.",
         );
       }
       throw error;

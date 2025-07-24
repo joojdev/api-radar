@@ -28,7 +28,7 @@ model Api {
 
   logs Log[]
 
-  @@unique([domain, endpoint], name: "unique_domain_endpoint")
+  @@unique([protocol, domain, endpoint])
 }
 
 model Log {
