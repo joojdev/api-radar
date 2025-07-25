@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { toast } from 'react-toastify';
 
 const CreateApiSchema = z.object({
+  name: z.string().nonempty(),
   protocol: z
     .enum(ProtocolEnum),
   domain: z
@@ -29,6 +30,7 @@ type CreateApiInput = z.infer<typeof CreateApiSchema>;
 
 export default function NewApiPrompt() {
   const { setCurrentPopup, setApiList } = useAppContext();
+  const [name, setName] = useState<string>('');
   const [protocol, setProtocol] = useState<Protocol>(null);
   const [domain, setDomain] = useState<string>('');
   const [endpoint, setEndpoint] = useState<string>('');
@@ -38,7 +40,7 @@ export default function NewApiPrompt() {
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
-    const data: Api = { protocol, domain, endpoint, accessInterval };
+    const data: Api = { name, protocol, domain, endpoint, accessInterval };
     const result = CreateApiSchema.safeParse(data);
 
     if (!result.success) {
@@ -73,6 +75,12 @@ export default function NewApiPrompt() {
     <BlackScreen>
       <form className='newApiForm' onSubmit={handleSubmit}>
         <h2>New API</h2>
+
+        <div className="formGroup">
+          <label htmlFor="name">Name</label>
+          <input type="text" id="name" autoComplete="off" placeholder="Example API" value={name} onChange={(event) => setName(event.target.value)} />
+          {errors.name && <span className="error">{errors.name}</span>}
+        </div>
 
         <div className="formGroup">
           <label htmlFor="protocol">Protocol</label>

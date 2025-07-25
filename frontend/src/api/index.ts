@@ -9,10 +9,12 @@ export type Protocol = ProtocolEnum | null;
 
 export type Api = {
   id?: number;
+  name: string;
   protocol: Protocol;
   domain: string;
   endpoint: string;
   accessInterval: number;
+  running?: boolean;
 };
 
 const api = axios.create({

@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { toast } from 'react-toastify';
 
 const EditApiSchema = z.object({
+  name: z.string().nonempty(),
   protocol: z
     .enum(ProtocolEnum),
   domain: z
@@ -32,16 +33,17 @@ export default function EditApiPrompt() {
 
   if (!selectedApi) return;
 
-  const [protocol, setProtocol] = useState<Protocol>(selectedApi?.protocol);
-  const [domain, setDomain] = useState<string>(selectedApi?.domain);
-  const [endpoint, setEndpoint] = useState<string>(selectedApi?.endpoint);
+  const [name, setName] = useState<string>(selectedApi.name);
+  const [protocol, setProtocol] = useState<Protocol>(selectedApi.protocol);
+  const [domain, setDomain] = useState<string>(selectedApi.domain);
+  const [endpoint, setEndpoint] = useState<string>(selectedApi.endpoint);
   const [accessInterval, setAccessInterval] = useState<number>(selectedApi?.accessInterval);
   const [errors, setErrors] = useState<Partial<Record<keyof EditApiInput, string>>>({});
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
-    const data: Api = { id: selectedApi?.id, protocol, domain, endpoint, accessInterval };
+    const data: Api = { id: selectedApi?.id, name, protocol, domain, endpoint, accessInterval };
     const result = EditApiSchema.safeParse(data);
 
     if (!result.success) {
@@ -82,6 +84,12 @@ export default function EditApiPrompt() {
     <BlackScreen>
       <form className='newApiForm' onSubmit={handleSubmit}>
         <h2>Edit API</h2>
+
+        <div className="formGroup">
+          <label htmlFor="name">Name</label>
+          <input type="text" id="name" autoComplete="off" placeholder="Example API" value={name} onChange={(event) => setName(event.target.value)} />
+          {errors.name && <span className="error">{errors.name}</span>}
+        </div>
 
         <div className="formGroup">
           <label htmlFor="protocol">Protocol</label>

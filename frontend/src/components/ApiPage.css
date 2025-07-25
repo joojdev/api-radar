@@ -1,0 +1,91 @@
+.apiContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.apiContainer > .buttonGroup {
+  display: flex;
+  gap: 30px;
+  padding-top: 50px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.apiContainer > .buttonGroup > button {
+  padding: 20px 45px;
+  font-size: 1.2em;
+  border-radius: 15px;
+  cursor: pointer;
+  box-shadow: 0 3px 3px #33333350;
+  border: 1px solid rgb(121, 121, 158);
+  background-color: #8b8bb2;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23373749' fill-opacity='0.19' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+  color: white;
+  transition: .1s;
+}
+
+.apiContainer > .buttonGroup > button:hover {
+  background: rgb(130, 130, 155);
+}
+
+.apiContainer > .buttonGroup > button:active {
+  box-shadow: none;
+}
+
+.title {
+  text-align: center;
+  padding: 55px 0;
+}
+
+.title > h2 {
+  font-size: 3.2em;
+}
+
+.title > small {
+  font-style: italic;
+}
+
+.apiData {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 70%;
+}
+
+.inlineDropDown {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.inlineDropDown > span {
+  cursor: pointer;
+}
+
+.playPauseButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 15px;
+  font-size: 1.4em;
+  border-radius: 20px;
+  border: 1px solid rgb(121, 121, 158);
+  background-color: #8b8bb2;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23373749' fill-opacity='0.19' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+  color: white;
+  color: white;
+  cursor: pointer;
+  transition: .1s;
+  box-shadow: 0 2px 4px #33333350;
+}
+
+.playPauseButton:hover {
+  background: rgb(130, 130, 155);
+}
+
+.playPauseButton:active {
+  box-shadow: none;
+}
