@@ -92,7 +92,7 @@ export default function NewApiPrompt() {
 
         <div className="formGroup">
           <label htmlFor="endpoint">Endpoint</label>
-          <input type="text" id="endpoint" value={endpoint} onChange={(event) => setEndpoint(event.target.value)} autoComplete="off" placeholder="/api/posts" />
+          <input type="text" id="endpoint" value={endpoint} onChange={(event) => setEndpoint(event.target.value)} autoComplete="off" placeholder="/api/health" />
           {errors.endpoint && <span className="error">{errors.endpoint}</span>}
         </div>
 

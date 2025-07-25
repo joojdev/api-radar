@@ -26,6 +26,9 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   user-select: none;
   border: #c7c7e4 1px solid;
   transition: .05s;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .apiList > li:hover {
