@@ -1,5 +1,7 @@
 import './App.css';
 import ApiPage from './components/ApiPage';
+import ConfirmDeletePrompt from './components/ConfirmDeletePrompt';
+import EditApiPrompt from './components/EditApiPrompt';
 import NavBar from './components/NavBar';
 import NewApiPrompt from './components/NewApiPrompt';
 import SideBar from './components/SideBar';
@@ -17,6 +19,8 @@ function App() {
         {selectedApi && <ApiPage />}
       </div>
       {currentPopup == Popup.NEW_API && <NewApiPrompt />}
+      {currentPopup == Popup.EDIT_API && <EditApiPrompt />}
+      {currentPopup == Popup.DELETE_API && <ConfirmDeletePrompt />}
       <ToastContainer />
     </>
   );

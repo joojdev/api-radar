@@ -14,7 +14,9 @@ interface AppContextType {
 
 export enum Popup {
   NONE,
-  NEW_API
+  NEW_API,
+  EDIT_API,
+  DELETE_API
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);

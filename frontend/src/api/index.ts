@@ -29,3 +29,17 @@ export const createApi = async (apiData: Api): Promise<Api> => {
   const response = await api.post<Api>('/api', apiData);
   return response.data;
 };
+
+export const deleteApi = async (apiId: number): Promise<boolean> => {
+  try {
+    await api.delete<boolean>(`/api/${apiId}`);
+    return true;
+  } catch(error) {
+    return false;
+  }
+}
+
+export const editApi = async (apiData: Api): Promise<Api> => {
+  const response = await api.put<Api>('/api', apiData);
+  return response.data;
+}
