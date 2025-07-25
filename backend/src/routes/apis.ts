@@ -1,7 +1,6 @@
 import { FastifyPluginAsync } from "fastify";
 import { z } from "zod";
 import { Api, Prisma } from "../../generated/prisma";
-import { request } from "http";
 
 enum Protocol {
   HTTP = "http",
@@ -9,6 +8,7 @@ enum Protocol {
 }
 
 const CreateApiSchema = z.object({
+  name: z.string().nonempty(),
   protocol: z.enum(Protocol),
   domain: z
     .string()
@@ -45,6 +45,7 @@ const EditApiSchema = z.object({
       "Endpoint must start with '/' and contain only letters, numbers, '-', '_' or '/'.",
     ),
   accessInterval: z.coerce.number(),
+  name: z.string().nonempty()
 });
 
 const apisRoutes: FastifyPluginAsync = async (app) => {

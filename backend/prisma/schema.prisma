@@ -21,10 +21,12 @@ enum Protocol {
 
 model Api {
   id Int @id @default(autoincrement())
+  name String
   protocol Protocol 
   domain String
   endpoint String
   accessInterval Int
+  running Boolean @default(true)
 
   logs Log[]
 
