@@ -14,11 +14,18 @@ export default function ApiListElement({ api }: { api: Api }) {
     setSelectedApi(api);
   }
 
+  function handleDropdownClick(event: React.MouseEvent) {
+    event.stopPropagation();
+    console.log(1);
+  }
+
   return (
     <li
       onClick={handleClick}
-      className={checkIfApiIsSelected() ? 'selected' : ''}>
-        {api.protocol == ProtocolEnum.HTTP ? <FontAwesomeIcon icon={['facr', 'triangle-exclamation']} /> : api.protocol == ProtocolEnum.HTTPS ? <FontAwesomeIcon icon={['facr', 'lock']} /> : ''} {api.name}
-      </li>
+      className={checkIfApiIsSelected() ? 'selected' : ''}
+    >
+      {api.protocol == ProtocolEnum.HTTP ? <FontAwesomeIcon icon={['facr', 'triangle-exclamation']} /> : api.protocol == ProtocolEnum.HTTPS ? <FontAwesomeIcon icon={['facr', 'lock']} /> : ''} {api.name}
+      <button onClick={handleDropdownClick}><FontAwesomeIcon icon="ellipsis" /></button>
+    </li>
   );
 }
