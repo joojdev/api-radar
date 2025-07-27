@@ -4,6 +4,7 @@
     "dev": "tsx watch src/server.js",
     "build": "tsc",
     "start": "node dist/server.js",
+    "populate_db": "tsx src/scripts/populate_db.js",
     "format": "prettier --write ."
   },
   "author": "joojdev",
