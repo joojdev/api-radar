@@ -25,6 +25,10 @@ const CreateApiSchema = z.object({
   accessInterval: z.coerce.number(),
 });
 
+const ChangeApiStateSchema = z.object({
+  apiId: z.coerce.number()
+});
+
 const DeleteApiSchema = z.object({
   apiId: z.coerce.number()
 });
@@ -140,6 +144,62 @@ const apisRoutes: FastifyPluginAsync = async (app) => {
       app.log.error(error, 'Unexpected error while updating API');
       return response.internalServerError('An unexpected error occurred.');
     }
+  });
+
+  app.post('/api/off/:apiId', async (request, response) => {
+    const parsed = ChangeApiStateSchema.safeParse(request.params);
+
+    if (!parsed.success) return response.badRequest('Invalid parameter. "apiId" must be a number.');
+
+    try {
+      await app.prisma.api.update({
+        data: {
+          running: false
+        },
+        where: {
+          id: parsed.data.apiId
+        }
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code == 'P2025'
+      ) {
+        return response.notFound("API not found!");
+      }
+
+      return response.internalServerError("An unexpected error occurred.");
+    }
+
+    response.code(200).send({ success: true, message: "API successfully turned off!" });
+  });
+
+  app.post('/api/on/:apiId', async (request, response) => {
+    const parsed = ChangeApiStateSchema.safeParse(request.params);
+
+    if (!parsed.success) return response.badRequest('Invalid parameter. "apiId" must be a number.');
+
+    try {
+      await app.prisma.api.update({
+        data: {
+          running: true
+        },
+        where: {
+          id: parsed.data.apiId
+        }
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code == 'P2025'
+      ) {
+        return response.notFound("API not found!");
+      }
+
+      return response.internalServerError("An unexpected error occurred.");
+    }
+
+    response.code(200).send({ success: true, message: "API successfully turned on!" });
   });
 };
 
