@@ -5,6 +5,7 @@ interface AppContextType {
   apiList: Api[];
   setApiList: React.Dispatch<React.SetStateAction<Api[]>>;
   loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   error: Error | null;
   selectedApi: Api | null;
   setSelectedApi: React.Dispatch<React.SetStateAction<Api | null>>;
@@ -49,7 +50,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AppContext.Provider value={{ apiList, setApiList, loading, error, selectedApi, setSelectedApi, currentPopup, setCurrentPopup, dropDownSelected, setDropDownSelected }}>
+    <AppContext.Provider value={{ apiList, setApiList, loading, setLoading, error, selectedApi, setSelectedApi, currentPopup, setCurrentPopup, dropDownSelected, setDropDownSelected }}>
       { children }
     </AppContext.Provider>
   );

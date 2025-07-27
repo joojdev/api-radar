@@ -3,30 +3,8 @@ import BlackScreen from "./BlackScreen";
 import './NewApiPrompt.css';
 import { useAppContext, Popup } from "../hooks/useAppContext";
 import { useState } from "react";
-import { createApi, fetchApiList, ProtocolEnum, type Api, type Protocol } from "../api";
-import { z } from 'zod';
+import { createApi, CreateApiSchema, fetchApiList, ProtocolEnum, type CreateApiInput, type Protocol } from "../api";
 import { toast } from 'react-toastify';
-
-const CreateApiSchema = z.object({
-  name: z.string().nonempty(),
-  protocol: z
-    .enum(ProtocolEnum),
-  domain: z
-    .string()
-    .regex(
-      /^(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,}$/,
-      "Must be a valid domain."
-    ),
-  endpoint: z
-    .string()
-    .regex(
-      /^\/[A-Za-z0-9_\-\/]*$/,
-      "Endpoint must start with '/' and contain only letters, numbers, '-', '_' or '/'.",
-    ),
-  accessInterval: z.coerce.number(),
-});
-
-type CreateApiInput = z.infer<typeof CreateApiSchema>;
 
 export default function NewApiPrompt() {
   const { setCurrentPopup, setApiList } = useAppContext();
@@ -40,7 +18,7 @@ export default function NewApiPrompt() {
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
-    const data: Api = { name, protocol, domain, endpoint, accessInterval };
+    const data: CreateApiInput = { name, protocol: protocol as ProtocolEnum, domain, endpoint, accessInterval };
     const result = CreateApiSchema.safeParse(data);
 
     if (!result.success) {

@@ -3,30 +3,8 @@ import BlackScreen from "./BlackScreen";
 import './NewApiPrompt.css';
 import { useAppContext, Popup } from "../hooks/useAppContext";
 import { useState } from "react";
-import { editApi, fetchApiList, ProtocolEnum, type Api, type Protocol } from "../api";
-import { z } from 'zod';
+import { editApi, EditApiSchema, fetchApiList, ProtocolEnum, type Api, type EditApiInput, type Protocol } from "../api";
 import { toast } from 'react-toastify';
-
-const EditApiSchema = z.object({
-  name: z.string().nonempty(),
-  protocol: z
-    .enum(ProtocolEnum),
-  domain: z
-    .string()
-    .regex(
-      /^(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,}$/,
-      "Must be a valid domain."
-    ),
-  endpoint: z
-    .string()
-    .regex(
-      /^\/[A-Za-z0-9_\-\/]*$/,
-      "Endpoint must start with '/' and contain only letters, numbers, '-', '_' or '/'.",
-    ),
-  accessInterval: z.coerce.number(),
-});
-
-type EditApiInput = z.infer<typeof EditApiSchema>;
 
 export default function EditApiPrompt() {
   const { setCurrentPopup, setApiList, apiList, setSelectedApi, dropDownSelected, setDropDownSelected } = useAppContext();
@@ -45,7 +23,7 @@ export default function EditApiPrompt() {
 
     if (dropDownSelected == null) return;
 
-    const data: Api = { id: apiList[dropDownSelected].id, name, protocol, domain, endpoint, accessInterval };
+    const data: EditApiInput = { id: apiList[dropDownSelected].id!, name, protocol: protocol as ProtocolEnum, domain, endpoint, accessInterval };
     const result = EditApiSchema.safeParse(data);
 
     if (!result.success) {
