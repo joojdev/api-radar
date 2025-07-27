@@ -14,7 +14,7 @@ export type Api = {
   domain: string;
   endpoint: string;
   accessInterval: number;
-  running?: boolean;
+  running: boolean;
 };
 
 const api = axios.create({

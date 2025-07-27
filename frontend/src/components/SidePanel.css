@@ -82,7 +82,8 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   position: absolute;
   top: 0px;
   left: 101%;
-  background: #889db9;
+  background-color: #889db9;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%232d353f' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
   border: 1px solid #647181;
   list-style-type: none;
   padding: 7px;
@@ -94,6 +95,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   display: flex;
   flex-direction: column;
   gap: 5px;
+  box-shadow: 0 3px 5px #33333349;
 }
 
 .dropDownMenu > li {
@@ -101,14 +103,15 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   cursor: pointer;
   border-radius: 5px;
   user-select: none;
+  transition: .1s;
 }
 
 .dropDownMenu > li:hover {
-  background: #70849e;
+  background: #56575857;
 }
 
 .dropDownMenu > li:active {
-  background: #7e93af;
+  background: #7e93afbd;
 }
 
 .clickCurtain {

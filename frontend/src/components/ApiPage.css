@@ -21,6 +21,8 @@
 
 .title > small {
   font-style: italic;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .apiData {

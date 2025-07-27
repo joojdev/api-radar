@@ -11,13 +11,17 @@ export default function ApiPage() {
     return `${api.protocol}://${api.domain}${api.endpoint}`
   }
 
+  function handleClickURL(url: string) {
+    window.open(url);
+  }
+
   if (!selectedApi) return;
 
   return (
     <div className='apiContainer'>
       <div className="title">
         <h2>{selectedApi.name}</h2>
-        <small>{returnFullURL(selectedApi)}</small>
+        <small onClick={() => handleClickURL(returnFullURL(selectedApi))}>{returnFullURL(selectedApi)}</small>
       </div>
 
       <div className="apiData">
