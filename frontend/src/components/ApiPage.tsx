@@ -1,19 +1,11 @@
 import type { Api } from "../api";
-import { Popup, useAppContext } from "../hooks/useAppContext";
+import { useAppContext } from "../hooks/useAppContext";
 import InlineDropDown from "./InlineDropDown";
 import PlayPauseButton from "./PlayPauseButton";
 import './ApiPage.css';
 
 export default function ApiPage() {
-  const { selectedApi, setCurrentPopup } = useAppContext();
-
-  async function handleDeleteAPI() {
-    setCurrentPopup(Popup.DELETE_API);
-  }
-
-  function handleEditAPI() {
-    setCurrentPopup(Popup.EDIT_API);
-  }
+  const { selectedApi } = useAppContext();
 
   function returnFullURL(api: Api) {
     return `${api.protocol}://${api.domain}${api.endpoint}`
@@ -42,10 +34,6 @@ export default function ApiPage() {
         </InlineDropDown>
       </div>
 
-      <div className="buttonGroup">
-        <button onClick={handleDeleteAPI}>Delete API</button>
-        <button onClick={handleEditAPI}>Edit API</button>
-      </div>
       <PlayPauseButton />
     </div>
   );

@@ -10,7 +10,7 @@ export default function ListSidePanel() {
     <SidePanel>
       <ul className="apiList">
         {apiList.map((api: Api, index: number) => (
-          <ApiListElement key={index} api={api} />
+          <ApiListElement index={index} key={index} api={api} />
         ))}
       </ul>
     </SidePanel>

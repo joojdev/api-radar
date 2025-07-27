@@ -29,21 +29,23 @@ const EditApiSchema = z.object({
 type EditApiInput = z.infer<typeof EditApiSchema>;
 
 export default function EditApiPrompt() {
-  const { setCurrentPopup, setApiList, selectedApi, setSelectedApi } = useAppContext();
+  const { setCurrentPopup, setApiList, apiList, setSelectedApi, dropDownSelected, setDropDownSelected } = useAppContext();
 
-  if (!selectedApi) return;
+  if (dropDownSelected == null) return;
 
-  const [name, setName] = useState<string>(selectedApi.name);
-  const [protocol, setProtocol] = useState<Protocol>(selectedApi.protocol);
-  const [domain, setDomain] = useState<string>(selectedApi.domain);
-  const [endpoint, setEndpoint] = useState<string>(selectedApi.endpoint);
-  const [accessInterval, setAccessInterval] = useState<number>(selectedApi?.accessInterval);
+  const [name, setName] = useState<string>(apiList[dropDownSelected].name);
+  const [protocol, setProtocol] = useState<Protocol>(apiList[dropDownSelected].protocol);
+  const [domain, setDomain] = useState<string>(apiList[dropDownSelected].domain);
+  const [endpoint, setEndpoint] = useState<string>(apiList[dropDownSelected].endpoint);
+  const [accessInterval, setAccessInterval] = useState<number>(apiList[dropDownSelected]?.accessInterval);
   const [errors, setErrors] = useState<Partial<Record<keyof EditApiInput, string>>>({});
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
-    const data: Api = { id: selectedApi?.id, name, protocol, domain, endpoint, accessInterval };
+    if (dropDownSelected == null) return;
+
+    const data: Api = { id: apiList[dropDownSelected].id, name, protocol, domain, endpoint, accessInterval };
     const result = EditApiSchema.safeParse(data);
 
     if (!result.success) {
@@ -61,6 +63,7 @@ export default function EditApiPrompt() {
       toast.success('API edited successfully!')
       setErrors({});
       setSelectedApi(api);
+      setDropDownSelected(null);
       handleClose();
     } catch(error: any) {
       const message = error.response?.data?.message || 'There was an error while editing the API!';

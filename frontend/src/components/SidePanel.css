@@ -15,38 +15,108 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
   gap: 10px;
 }
 
-.apiList > li {
+.apiList > .wrapper > li {
   background: #b9b9d8;
   padding: 7px 12px;
   border-radius: 5px;
   color: #333;
-  box-shadow: 0 2px 5px #33333310;
+  box-shadow: 0 2px 5px #3333332f;
   font-style: italic;
-  text-overflow: ellipsis;
   cursor: pointer;
   user-select: none;
   border: #c7c7e4 1px solid;
   transition: .05s;
+  display: flex;
+  align-items: center;
+}
+
+.apiList > .wrapper > li > .liContent {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  width: 85%;
+}
+
+.wrapper {
   position: relative;
 }
 
-.apiList > li > button {
-  position: absolute;
-  right: 12px;
-}
-
-.apiList > li:hover {
+.apiList > .wrapper > li:hover {
   background: #c7c7e4;
 }
 
-.apiList > li:active {
-  transform: translateY(2px);
+.apiList > .wrapper > li:active {
   box-shadow: none;
 }
 
-.apiList > li.selected {
+.apiList > .wrapper > li.selected {
   font-weight: bold;
+}
+
+.apiList > .wrapper > button {
+  position: absolute;
+  top: 8px;
+  right: 13px;
+  background: none;
+  border: none;
+  font-size: 15px;
+  width: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1/1;
+}
+
+.apiList > .wrapper > button:hover {
+  background: #33333331;
+}
+
+.apiList > .wrapper > button:active {
+  background: #eeeeee31;
+}
+
+.dropDownMenu {
+  position: absolute;
+  top: 0px;
+  left: 101%;
+  background: #889db9;
+  border: 1px solid #647181;
+  list-style-type: none;
+  padding: 7px;
+  z-index: 998;
+  width: 120px;
+  border-radius: 10px;
+  color: white;
+  font-style: initial;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.dropDownMenu > li {
+  padding: 7px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  user-select: none;
+}
+
+.dropDownMenu > li:hover {
+  background: #70849e;
+}
+
+.dropDownMenu > li:active {
+  background: #7e93af;
+}
+
+.clickCurtain {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  z-index: 997;
+  cursor: initial;
 }

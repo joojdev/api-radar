@@ -10,6 +10,8 @@ interface AppContextType {
   setSelectedApi: React.Dispatch<React.SetStateAction<Api | null>>;
   currentPopup: Popup;
   setCurrentPopup: React.Dispatch<React.SetStateAction<Popup>>;
+  dropDownSelected: number | null;
+  setDropDownSelected: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 export enum Popup {
@@ -27,6 +29,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
   const [currentPopup, setCurrentPopup] = useState<Popup>(Popup.NONE);
+  const [dropDownSelected, setDropDownSelected] = useState<number | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -46,7 +49,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AppContext.Provider value={{ apiList, setApiList, loading, error, selectedApi, setSelectedApi, currentPopup, setCurrentPopup }}>
+    <AppContext.Provider value={{ apiList, setApiList, loading, error, selectedApi, setSelectedApi, currentPopup, setCurrentPopup, dropDownSelected, setDropDownSelected }}>
       { children }
     </AppContext.Provider>
   );
