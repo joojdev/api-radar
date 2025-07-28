@@ -20,7 +20,7 @@ const buildServer = () => {
   app.register(prismaPlugin);
   app.register(cors, {
     origin: "*",
-    methods: ['GET', 'POST', 'PUT', 'DELETE']
+    methods: ["GET", "POST", "PUT", "DELETE"],
   });
 
   app.register(Autoload, {

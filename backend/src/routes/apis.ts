@@ -19,18 +19,18 @@ const CreateApiSchema = z.object({
   endpoint: z
     .string()
     .regex(
-      /^\/[A-Za-z0-9_\-\/]*$/,
-      "Endpoint must start with '/' and contain only letters, numbers, '-', '_' or '/'.",
+      /^\/[A-Za-z0-9_\-.\/]*$/,
+      "Endpoint must start with '/' and contain only letters, numbers, '-', '.', '_' or '/'.",
     ),
   accessInterval: z.coerce.number(),
 });
 
 const ChangeApiStateSchema = z.object({
-  apiId: z.coerce.number()
+  apiId: z.coerce.number(),
 });
 
 const DeleteApiSchema = z.object({
-  apiId: z.coerce.number()
+  apiId: z.coerce.number(),
 });
 
 const EditApiSchema = z.object({
@@ -45,11 +45,11 @@ const EditApiSchema = z.object({
   endpoint: z
     .string()
     .regex(
-      /^\/[A-Za-z0-9_\-\/]*$/,
-      "Endpoint must start with '/' and contain only letters, numbers, '-', '_' or '/'.",
+      /^\/[A-Za-z0-9_\-.\/]*$/,
+      "Endpoint must start with '/' and contain only letters, numbers, '-', '.', '_' or '/'.",
     ),
   accessInterval: z.coerce.number(),
-  name: z.string().nonempty()
+  name: z.string().nonempty(),
 });
 
 const apisRoutes: FastifyPluginAsync = async (app) => {
@@ -61,7 +61,9 @@ const apisRoutes: FastifyPluginAsync = async (app) => {
     const parsed = CreateApiSchema.safeParse(request.body);
 
     if (!parsed.success) {
-      return response.badRequest(parsed.error.issues.map((error) => error.message).join('\n'));
+      return response.badRequest(
+        parsed.error.issues.map((error) => error.message).join("\n"),
+      );
     }
 
     try {
@@ -83,87 +85,92 @@ const apisRoutes: FastifyPluginAsync = async (app) => {
     }
   });
 
-  app.delete('/api/:apiId', async (request, response) => {
+  app.delete("/api/:apiId", async (request, response) => {
     const parsed = DeleteApiSchema.safeParse(request.params);
 
     if (!parsed.success) {
-      return response.badRequest(parsed.error.issues.map((error) => error.message).join('\n'));
+      return response.badRequest(
+        parsed.error.issues.map((error) => error.message).join("\n"),
+      );
     }
 
     try {
       await app.prisma.api.delete({
         where: {
-          id: parsed.data.apiId
-        }
+          id: parsed.data.apiId,
+        },
       });
 
       return response.code(200).send(true);
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2025'
+        error.code === "P2025"
       ) {
-        return response.notFound('API not found.');
+        return response.notFound("API not found.");
       }
 
-      app.log.error(error, 'Unexpected error while deleting API');
-      return response.internalServerError('An unexpected error occurred.');
+      app.log.error(error, "Unexpected error while deleting API");
+      return response.internalServerError("An unexpected error occurred.");
     }
   });
 
-  app.put('/api', async (request, response) => {
+  app.put("/api", async (request, response) => {
     const parsed = EditApiSchema.safeParse(request.body);
 
     if (!parsed.success) {
-      return response.badRequest(parsed.error.issues.map((error) => error.message).join('\n'));
+      return response.badRequest(
+        parsed.error.issues.map((error) => error.message).join("\n"),
+      );
     }
 
     try {
       const api: Api = await app.prisma.api.update({
         data: parsed.data,
         where: {
-          id: parsed.data.id
-        }
+          id: parsed.data.id,
+        },
       });
 
       return response.code(200).send(api);
     } catch (error) {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError
-      ) {
-        if (error.code === 'P2002') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === "P2002") {
           return response.badRequest(
-            "There is an API with that protocol, domain and endpoint already."
+            "There is an API with that protocol, domain and endpoint already.",
           );
         }
-        if (error.code === 'P2025') {
+        if (error.code === "P2025") {
           return response.notFound("API not found.");
         }
       }
 
-      app.log.error(error, 'Unexpected error while updating API');
-      return response.internalServerError('An unexpected error occurred.');
+      app.log.error(error, "Unexpected error while updating API");
+      return response.internalServerError("An unexpected error occurred.");
     }
   });
 
-  app.post('/api/off/:apiId', async (request, response) => {
+  app.post("/api/off/:apiId", async (request, response) => {
     const parsed = ChangeApiStateSchema.safeParse(request.params);
 
-    if (!parsed.success) return response.badRequest('Invalid parameter. "apiId" must be a number.');
+    if (!parsed.success)
+      return response.badRequest(
+        'Invalid parameter. "apiId" must be a number.',
+      );
 
     try {
       await app.prisma.api.update({
         data: {
-          running: false
+          running: false,
         },
         where: {
-          id: parsed.data.apiId
-        }
+          id: parsed.data.apiId,
+        },
       });
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code == 'P2025'
+        error.code == "P2025"
       ) {
         return response.notFound("API not found!");
       }
@@ -171,27 +178,32 @@ const apisRoutes: FastifyPluginAsync = async (app) => {
       return response.internalServerError("An unexpected error occurred.");
     }
 
-    response.code(200).send({ success: true, message: "API successfully turned off!" });
+    response
+      .code(200)
+      .send({ success: true, message: "API successfully turned off!" });
   });
 
-  app.post('/api/on/:apiId', async (request, response) => {
+  app.post("/api/on/:apiId", async (request, response) => {
     const parsed = ChangeApiStateSchema.safeParse(request.params);
 
-    if (!parsed.success) return response.badRequest('Invalid parameter. "apiId" must be a number.');
+    if (!parsed.success)
+      return response.badRequest(
+        'Invalid parameter. "apiId" must be a number.',
+      );
 
     try {
       await app.prisma.api.update({
         data: {
-          running: true
+          running: true,
         },
         where: {
-          id: parsed.data.apiId
-        }
+          id: parsed.data.apiId,
+        },
       });
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code == 'P2025'
+        error.code == "P2025"
       ) {
         return response.notFound("API not found!");
       }
@@ -199,7 +211,9 @@ const apisRoutes: FastifyPluginAsync = async (app) => {
       return response.internalServerError("An unexpected error occurred.");
     }
 
-    response.code(200).send({ success: true, message: "API successfully turned on!" });
+    response
+      .code(200)
+      .send({ success: true, message: "API successfully turned on!" });
   });
 };
 

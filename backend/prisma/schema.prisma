@@ -36,7 +36,7 @@ model Api {
 model Log {
   id Int @id @default(autoincrement())
   statusCode Int
-  latency Int
+  responseTime Int
   timestamp DateTime @db.Timestamp() @default(now())
   apiId Int
 
