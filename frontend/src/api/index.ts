@@ -18,6 +18,14 @@ export type Api = {
   running: boolean;
 };
 
+export type Log = {
+  id: number;
+  statusCode: number;
+  responseTime: number;
+  timestamp: Date;
+  apiId: number;
+};
+
 export const CreateApiSchema = z.object({
   name: z.string().nonempty(),
   protocol: z
@@ -83,12 +91,12 @@ export const deleteApi = async (apiId: number): Promise<boolean> => {
   } catch(error) {
     return false;
   }
-}
+};
 
 export const editApi = async (apiData: EditApiInput): Promise<Api> => {
   const response = await api.put<Api>('/api', apiData);
   return response.data;
-}
+};
 
 export const turnOffApi = async (apiData: Api): Promise<boolean> => {
   try {
@@ -97,7 +105,7 @@ export const turnOffApi = async (apiData: Api): Promise<boolean> => {
   } catch (error) {
     return false;
   }
-}
+};
 
 export const turnOnApi = async (apiData: Api): Promise<boolean> => {
   try {
@@ -105,5 +113,14 @@ export const turnOnApi = async (apiData: Api): Promise<boolean> => {
     return true;
   } catch (error) {
     return false;
+  }
+};
+
+export const getLastLog = async (apiData: Api): Promise<Log | null> => {
+  try {
+    const response = await api.get(`/log/last/${apiData.id}`);
+    return response.data;
+  } catch (error) {
+    return null;
   }
 }

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppContext } from "../hooks/useAppContext";
 import { turnOffApi, turnOnApi } from "../api";
 
@@ -9,6 +9,10 @@ export default function PlayPauseButton() {
   if (!selectedApi) return;
 
   const [running, setRunning] = useState<boolean>(selectedApi.running);
+
+  useEffect(() => {
+    setRunning(selectedApi.running);
+  }, [selectedApi])
 
   async function handleClick() {
     if (!selectedApi) return;

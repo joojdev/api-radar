@@ -5,7 +5,7 @@ import PlayPauseButton from "./PlayPauseButton";
 import './ApiPage.css';
 
 export default function ApiPage() {
-  const { selectedApi } = useAppContext();
+  const { selectedApi, currentStatus, currentResponseTime } = useAppContext();
 
   function returnFullURL(api: Api) {
     return `${api.protocol}://${api.domain}${api.endpoint}`
@@ -25,11 +25,11 @@ export default function ApiPage() {
       </div>
 
       <div className="apiData">
-        <InlineDropDown name="Current Response Time: 350ms">
+        <InlineDropDown name={`Current Response Time: ${currentResponseTime}ms`}>
           <h3>hello, world!</h3>
         </InlineDropDown>
 
-        <InlineDropDown name="Current Status: UP">
+        <InlineDropDown name={`Current Status: ${currentStatus}`}>
           <h3>hello, world!</h3>
         </InlineDropDown>
       </div>

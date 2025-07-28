@@ -1,18 +1,27 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ProtocolEnum, type Api } from "../api";
+import { getLastLog, ProtocolEnum, type Api, type Log } from "../api";
 import { useAppContext } from "../hooks/useAppContext";
 import DropDownMenu from "./DropDownMenu";
 
 export default function ApiListElement({ api, index }: { api: Api, index: number }) {
-  const { setSelectedApi, selectedApi, dropDownSelected, setDropDownSelected } = useAppContext();
+  const { setSelectedApi, selectedApi, dropDownSelected, setDropDownSelected, setLoading, setCurrentResponseTime, setCurrentStatus } = useAppContext();
 
   function checkIfApiIsSelected() {
     return JSON.stringify(selectedApi) == JSON.stringify(api);
   }
 
-  function handleClick() {
+  async function handleClick() {
     if (checkIfApiIsSelected()) return setSelectedApi(null);
     setSelectedApi(api);
+
+    setLoading(true);
+    const log: Log | null = await getLastLog(api);
+    setLoading(false);
+
+    if (!log) return;
+    
+    setCurrentResponseTime(log.responseTime);
+    setCurrentStatus(log.statusCode);
   }
 
   function handleDropdownClick(event: React.MouseEvent) {

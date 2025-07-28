@@ -13,6 +13,10 @@ interface AppContextType {
   setCurrentPopup: React.Dispatch<React.SetStateAction<Popup>>;
   dropDownSelected: number | null;
   setDropDownSelected: React.Dispatch<React.SetStateAction<number | null>>;
+  currentStatus: number | null;
+  setCurrentStatus: React.Dispatch<React.SetStateAction<number | null>>;
+  currentResponseTime: number | null;
+  setCurrentResponseTime: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 export enum Popup {
@@ -31,6 +35,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<Error | null>(null);
   const [currentPopup, setCurrentPopup] = useState<Popup>(Popup.NONE);
   const [dropDownSelected, setDropDownSelected] = useState<number | null>(null);
+  const [currentStatus, setCurrentStatus] = useState<number | null>(null);
+  const [currentResponseTime, setCurrentResponseTime] = useState<number | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -50,7 +56,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AppContext.Provider value={{ apiList, setApiList, loading, setLoading, error, selectedApi, setSelectedApi, currentPopup, setCurrentPopup, dropDownSelected, setDropDownSelected }}>
+    <AppContext.Provider value={{ apiList, setApiList, loading, setLoading, error, selectedApi, setSelectedApi, currentPopup, setCurrentPopup, dropDownSelected, setDropDownSelected, setCurrentResponseTime, currentResponseTime, setCurrentStatus, currentStatus }}>
       { children }
     </AppContext.Provider>
   );
