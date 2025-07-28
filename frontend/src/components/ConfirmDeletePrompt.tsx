@@ -5,7 +5,7 @@ import BlackScreen from "./BlackScreen";
 import './ConfirmDeletePrompt.css';
 
 export default function ConfirmDeletePrompt() {
-  const { setCurrentPopup, apiList, setDropDownSelected, dropDownSelected, setSelectedApi, setApiList } = useAppContext();
+  const { setLoading, setCurrentPopup, apiList, setDropDownSelected, dropDownSelected, setSelectedApi, setApiList } = useAppContext();
 
   function handleNo() {
     setCurrentPopup(Popup.NONE);
@@ -15,7 +15,9 @@ export default function ConfirmDeletePrompt() {
     if (dropDownSelected == null) return;
     if (!apiList[dropDownSelected]) return;
 
+    setLoading(true);
     const success = await deleteApi(apiList[dropDownSelected].id!);
+    setLoading(false);
 
     if (success) {
       toast.success('API deleted successfully!');
@@ -27,11 +29,14 @@ export default function ConfirmDeletePrompt() {
     }
 
     try {
+      setLoading(true);
       const list = await fetchApiList();
       setApiList(list);
     } catch (error: any) {
       const message = error.response?.data?.message || "There was an error!";
       toast.error(message);
+    } finally {
+      setLoading(false);
     }
   }
 

@@ -7,7 +7,7 @@ import { createApi, CreateApiSchema, fetchApiList, ProtocolEnum, type CreateApiI
 import { toast } from 'react-toastify';
 
 export default function NewApiPrompt() {
-  const { setCurrentPopup, setApiList } = useAppContext();
+  const { setLoading, setCurrentPopup, setApiList } = useAppContext();
   const [name, setName] = useState<string>('');
   const [protocol, setProtocol] = useState<Protocol>(null);
   const [domain, setDomain] = useState<string>('');
@@ -32,6 +32,7 @@ export default function NewApiPrompt() {
     }
 
     try {
+      setLoading(true);
       await createApi(data);
       toast.success('API created successfully!')
       setErrors({});
@@ -42,6 +43,8 @@ export default function NewApiPrompt() {
     } catch (error: any) {
       const message = error.response?.data?.message || 'There was an error!';
       toast.error(message);
+    } finally {
+      setLoading(false);
     }
   }
 
