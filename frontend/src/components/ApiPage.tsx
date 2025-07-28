@@ -25,15 +25,11 @@ export default function ApiPage() {
       </div>
 
       <div className="apiData">
-        <InlineDropDown name="Latency: 100ms">
+        <InlineDropDown name="Current Response Time: 350ms">
           <h3>hello, world!</h3>
         </InlineDropDown>
 
-        <InlineDropDown name="Response Time: 350ms">
-          <h3>hello, world!</h3>
-        </InlineDropDown>
-
-        <InlineDropDown name="Status: UP">
+        <InlineDropDown name="Current Status: UP">
           <h3>hello, world!</h3>
         </InlineDropDown>
       </div>

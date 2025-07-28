@@ -31,8 +31,8 @@ export const CreateApiSchema = z.object({
   endpoint: z
     .string()
     .regex(
-      /^\/[A-Za-z0-9_\-\/]*$/,
-      "Endpoint must start with '/' and contain only letters, numbers, '-', '_' or '/'.",
+      /^\/[A-Za-z0-9_\-.\/]*$/,
+      "Endpoint must start with '/' and contain only letters, numbers, '-', '.', '_' or '/'.",
     ),
   accessInterval: z.coerce.number(),
 });
@@ -53,8 +53,8 @@ export const EditApiSchema = z.object({
   endpoint: z
     .string()
     .regex(
-      /^\/[A-Za-z0-9_\-\/]*$/,
-      "Endpoint must start with '/' and contain only letters, numbers, '-', '_' or '/'.",
+      /^\/[A-Za-z0-9_\-.\/]*$/,
+      "Endpoint must start with '/' and contain only letters, numbers, '-', '.', '_' or '/'.",
     ),
   accessInterval: z.coerce.number(),
 });
