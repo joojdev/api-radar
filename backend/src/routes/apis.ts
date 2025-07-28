@@ -54,7 +54,11 @@ const EditApiSchema = z.object({
 
 const apisRoutes: FastifyPluginAsync = async (app) => {
   app.get("/apis", async () => {
-    return app.prisma.api.findMany();
+    return app.prisma.api.findMany({
+      orderBy: {
+        name: "asc"
+      }
+    });
   });
 
   app.post("/api", async (request, response) => {
