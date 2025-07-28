@@ -63,6 +63,7 @@ function startCron(prisma: PrismaClient) {
     const currentMinute = Math.round(currentDate.getTime() / (1000 * 60));
 
     for await (const api of apis) {
+      if (!api.running) continue;
       if (currentMinute % api.accessInterval != 0) continue;
 
       const data: ResponseMetrics = await fetchWithMetrics(getFullUrl(api));
