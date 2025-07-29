@@ -1,3 +1,4 @@
+import "dotenv/config";
 import axios from "axios";
 import { Api, PrismaClient } from "../../generated/prisma";
 import cron from "node-cron";
