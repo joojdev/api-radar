@@ -4,7 +4,7 @@ import { useAppContext } from "../hooks/useAppContext";
 import DropDownMenu from "./DropDownMenu";
 
 export default function ApiListElement({ api, index }: { api: Api, index: number }) {
-  const { setSelectedApi, selectedApi, dropDownSelected, setDropDownSelected, setLoading, setCurrentResponseTime, setCurrentStatus } = useAppContext();
+  const { setSelectedApi, selectedApi, dropDownSelected, setDropDownSelected, setCurrentResponseTime, setCurrentStatus } = useAppContext();
 
   function checkIfApiIsSelected() {
     return JSON.stringify(selectedApi) == JSON.stringify(api);
@@ -14,11 +14,13 @@ export default function ApiListElement({ api, index }: { api: Api, index: number
     if (checkIfApiIsSelected()) return setSelectedApi(null);
     setSelectedApi(api);
 
-    setLoading(true);
     const log: Log | null = await getLastLog(api);
-    setLoading(false);
 
-    if (!log) return;
+    if (!log) {
+      setCurrentResponseTime(null);
+      setCurrentStatus(null);
+      return;
+    }
     
     setCurrentResponseTime(log.responseTime);
     setCurrentStatus(log.statusCode);

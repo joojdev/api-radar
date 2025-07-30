@@ -4,7 +4,7 @@ import { useAppContext } from "../hooks/useAppContext";
 import { turnOffApi, turnOnApi } from "../api";
 
 export default function PlayPauseButton() {
-  const { selectedApi, setLoading } = useAppContext();
+  const { selectedApi } = useAppContext();
 
   if (!selectedApi) return;
 
@@ -17,11 +17,12 @@ export default function PlayPauseButton() {
   async function handleClick() {
     if (!selectedApi) return;
 
-    setLoading(true);
     const success = running ? await turnOffApi(selectedApi) : await turnOnApi(selectedApi);
-    setLoading(false);
 
-    if (success) setRunning(!running);
+    if (success) {
+      setRunning(!running);
+      selectedApi.running = !running;
+    }
   }
 
   return (

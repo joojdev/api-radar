@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, type ReactNode } from 'react';
 
-export default function InlineDropDown({ name, children }: { name: string, children: ReactNode }) {
+export default function InlineDropDown({ name, children }: { name: ReactNode, children: ReactNode }) {
   const [open, setOpen] = useState<boolean>(false);
 
   function handleClick() {

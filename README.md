@@ -12,11 +12,14 @@ Este dashboard recolhe métricas (latência, status, tempo de resposta) de múlt
 
 - **Frontend**
   - React (Vite)
-  - Chart.js
+  - Zod
+  - Axios
+  - Recharts
 - **Backend**
   - Fastify
   - Socket.IO
   - Prisma ORM
+  - Zod
 - **Banco de Dados**
   - PostgreSQL
 

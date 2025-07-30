@@ -7,7 +7,7 @@ import { editApi, EditApiSchema, fetchApiList, ProtocolEnum, type Api, type Edit
 import { toast } from 'react-toastify';
 
 export default function EditApiPrompt() {
-  const { setLoading, setCurrentPopup, setApiList, apiList, setSelectedApi, dropDownSelected, setDropDownSelected } = useAppContext();
+  const { setCurrentPopup, setApiList, apiList, setSelectedApi, dropDownSelected, setDropDownSelected } = useAppContext();
 
   if (dropDownSelected == null) return;
 
@@ -37,7 +37,6 @@ export default function EditApiPrompt() {
     }
 
     try {
-      setLoading(true);
       const api: Api = await editApi(data);
       toast.success('API edited successfully!')
       setErrors({});
@@ -47,19 +46,14 @@ export default function EditApiPrompt() {
     } catch(error: any) {
       const message = error.response?.data?.message || 'There was an error while editing the API!';
       toast.error(message);
-    } finally {
-      setLoading(false);
     }
     
     try {
-      setLoading(true);
       const list = await fetchApiList();
       setApiList(list);
     } catch (error: any) {
       const message = error.response?.data?.message || 'There was an error!';
       toast.error(message);
-    } finally {
-      setLoading(false);
     }
   }
 

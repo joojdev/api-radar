@@ -8,6 +8,14 @@
   height: calc(100vh - var(--nav-height));
 }
 
+.message {
+  color: #333;
+}
+
+.bold {
+  font-weight: bold;
+}
+
 .title {
   text-align: center;
   padding: 55px 0;
