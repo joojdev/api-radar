@@ -40,5 +40,5 @@ model Log {
   timestamp DateTime @db.Timestamp() @default(now())
   apiId Int
 
-  api Api @relation(fields: [apiId], references: [id])
+  api Api @relation(fields: [apiId], references: [id], onDelete: Cascade)
 }

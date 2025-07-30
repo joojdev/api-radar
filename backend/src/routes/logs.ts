@@ -20,27 +20,29 @@ const logsRoutes: FastifyPluginAsync = async (app) => {
         apiId: parsed.data.apiId,
       },
       orderBy: {
-        timestamp: "asc"
-      }
+        timestamp: "asc",
+      },
     });
   });
 
-  app.get('/log/last/:apiId', async (request, response) => {
+  app.get("/log/last/:apiId", async (request, response) => {
     const parsed = SelectLogsSchema.safeParse(request.params);
 
     if (!parsed.success)
-      return response.badRequest('Invalid parameter. "apiId" must be a number.');
+      return response.badRequest(
+        'Invalid parameter. "apiId" must be a number.',
+      );
 
     const logs: Log[] = await app.prisma.log.findMany({
       where: {
-        apiId: parsed.data.apiId
+        apiId: parsed.data.apiId,
       },
       orderBy: {
-        timestamp: "desc"
-      }
+        timestamp: "desc",
+      },
     });
 
-    if (!logs) return response.notFound('This API doesn\'t have any log!');
+    if (!logs) return response.notFound("This API doesn't have any log!");
     return logs[0];
   });
 };
