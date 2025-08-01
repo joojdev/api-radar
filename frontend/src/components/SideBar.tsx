@@ -1,27 +1,27 @@
-import './SideBar.css';
-import { useState } from 'react';
-import type { IconProp } from '@fortawesome/fontawesome-svg-core';
-import SideBarIcon from './SideBarIcon';
-import ListSidePanel from './ListSidePanel';
-import GearSidePanel from './GearSidePanel';
+import "./SideBar.css";
+import { useState } from "react";
+import type { IconProp } from "@fortawesome/fontawesome-svg-core";
+import SideBarIcon from "./SideBarIcon";
+import ListSidePanel from "./ListSidePanel";
+import GearSidePanel from "./GearSidePanel";
 
 enum EnumTab {
   LIST,
   GEAR,
-  NONE
-};
+  NONE,
+}
 
-type Tab = { symbol: IconProp, tab: EnumTab };
+type Tab = { symbol: IconProp; tab: EnumTab };
 
 const tabs: Tab[] = [
   {
     symbol: "list",
-    tab: EnumTab.LIST
+    tab: EnumTab.LIST,
   },
   {
     symbol: "gear",
-    tab: EnumTab.GEAR
-  }
+    tab: EnumTab.GEAR,
+  },
 ];
 
 export default function SideBar() {
@@ -30,9 +30,17 @@ export default function SideBar() {
   return (
     <>
       <ul className="collapsedSidebar">
-        {tabs && tabs.map(({ symbol, tab }: Tab, index) => (
-          <SideBarIcon key={index} className={selectedTab == tab ? 'selected' : ''} icon={symbol} onClick={() => setSelectedTab(selectedTab == tab ? EnumTab.NONE : tab)} />
-        ))}   
+        {tabs &&
+          tabs.map(({ symbol, tab }: Tab, index) => (
+            <SideBarIcon
+              key={index}
+              className={selectedTab == tab ? "selected" : ""}
+              icon={symbol}
+              onClick={() =>
+                setSelectedTab(selectedTab == tab ? EnumTab.NONE : tab)
+              }
+            />
+          ))}
       </ul>
       {selectedTab == EnumTab.LIST && <ListSidePanel />}
       {selectedTab == EnumTab.GEAR && <GearSidePanel />}

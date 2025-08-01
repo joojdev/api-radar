@@ -2,23 +2,24 @@ import type { Api } from "../api";
 import { useAppContext } from "../hooks/useAppContext";
 import InlineDropDown from "./InlineDropDown";
 import PlayPauseButton from "./PlayPauseButton";
-import './ApiPage.css';
+import "./ApiPage.css";
 import ResponseTimeChart from "./ResponseTimeChart";
+import StatusCodeChart from "./StatusCodeChart";
 
 enum HTTP_RESPONSE_TYPE {
-  UNKNOWN = 'Unknown',
-  INFORMATIONAL = 'Up and informing',
-  SUCCESSFUL = 'Up',
-  REDIRECTION = 'Up and redirecting',
-  CLIENT_ERROR = 'Client error',
-  SERVER_ERROR = 'Server error'
-};
+  UNKNOWN = "Unknown",
+  INFORMATIONAL = "Up and informing",
+  SUCCESSFUL = "Up",
+  REDIRECTION = "Up and redirecting",
+  CLIENT_ERROR = "Client error",
+  SERVER_ERROR = "Server error",
+}
 
 export default function ApiPage() {
-  const { selectedApi, currentStatus, currentResponseTime } = useAppContext();
+  const { selectedApi, currentLogList } = useAppContext();
 
   function returnFullURL(api: Api) {
-    return `${api.protocol}://${api.domain}${api.endpoint}`
+    return `${api.protocol}://${api.domain}${api.endpoint}`;
   }
 
   function handleClickURL(url: string) {
@@ -44,34 +45,43 @@ export default function ApiPage() {
   if (!selectedApi) return;
 
   return (
-    <div className='apiContainer'>
+    <div className="apiContainer">
       <div className="title">
         <h2>{selectedApi.name}</h2>
-        <small onClick={() => handleClickURL(returnFullURL(selectedApi))}>{returnFullURL(selectedApi)}</small>
+        <small onClick={() => handleClickURL(returnFullURL(selectedApi))}>
+          {returnFullURL(selectedApi)}
+        </small>
       </div>
 
-      {(currentStatus != null || currentResponseTime != null) && <div className="apiData">
-        {currentResponseTime != null &&
-        <InlineDropDown
-          name={<>
-            <span className="bold">Current Response Time:</span> {currentResponseTime}ms
-          </>}>
-          <ResponseTimeChart />
-        </InlineDropDown>}
+      {currentLogList?.[0] && (
+        <div className="apiData">
+          <InlineDropDown
+            name={
+              <>
+                <span className="bold">Current Response Time:</span>{" "}
+                {currentLogList[0].responseTime}ms
+              </>
+            }
+          >
+            <ResponseTimeChart />
+          </InlineDropDown>
 
-        {currentStatus != null && 
-        <InlineDropDown
-          name={<>
-            <span className="bold">Current Status:</span> {getHttpResponseType(currentStatus)}
-          </>}
-        >
-          <h3>hello, world!</h3>
-        </InlineDropDown>}
-      </div>}
+          <InlineDropDown
+            name={
+              <>
+                <span className="bold">Current Status:</span>{" "}
+                {getHttpResponseType(currentLogList[0].statusCode)}
+              </>
+            }
+          >
+            <StatusCodeChart />
+          </InlineDropDown>
+        </div>
+      )}
 
-      {(currentStatus == null &&currentResponseTime == null) && <div className="message">
-        There's no data for this API yet.  
-      </div>}
+      {!currentLogList && (
+        <div className="message">There's no data for this API yet.</div>
+      )}
 
       <PlayPauseButton />
     </div>

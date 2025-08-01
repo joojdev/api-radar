@@ -12,12 +12,14 @@ export default function PlayPauseButton() {
 
   useEffect(() => {
     setRunning(selectedApi.running);
-  }, [selectedApi])
+  }, [selectedApi]);
 
   async function handleClick() {
     if (!selectedApi) return;
 
-    const success = running ? await turnOffApi(selectedApi) : await turnOnApi(selectedApi);
+    const success = running
+      ? await turnOffApi(selectedApi)
+      : await turnOnApi(selectedApi);
 
     if (success) {
       setRunning(!running);
@@ -26,6 +28,8 @@ export default function PlayPauseButton() {
   }
 
   return (
-    <button className="playPauseButton" onClick={handleClick}><FontAwesomeIcon icon={running ? 'pause' : 'play'} /></button>
+    <button className="playPauseButton" onClick={handleClick}>
+      <FontAwesomeIcon icon={running ? "pause" : "play"} />
+    </button>
   );
 }

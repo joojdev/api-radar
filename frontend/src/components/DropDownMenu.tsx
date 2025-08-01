@@ -22,7 +22,7 @@ export default function DropDownMenu() {
 
   return (
     <>
-      <ul onClick={handleDropDownClick} className='dropDownMenu'>
+      <ul onClick={handleDropDownClick} className="dropDownMenu">
         <li onClick={handleEdit}>Edit API</li>
         <li onClick={handleDelete}>Delete API</li>
       </ul>

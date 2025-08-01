@@ -10,7 +10,7 @@ import {
 } from "recharts";
 import { useAppContext } from "../hooks/useAppContext";
 
-export default function ResponseTimeChart() {
+export default function StatusCodeChart() {
   const { currentLogList } = useAppContext();
 
   const formatTime = (isoString: string) => {
@@ -53,11 +53,11 @@ export default function ResponseTimeChart() {
         <Tooltip
           labelFormatter={formatDate}
           formatter={(value: number, _name: string) => [
-            `Response Time: ${value}ms`,
+            `Status Code: ${value}`,
           ]}
         />
         <Bar
-          dataKey="responseTime"
+          dataKey="statusCode"
           fill="#8884d8"
           activeBar={<Rectangle fill="#8884d8" stroke="#7c7a9eff" />}
         />

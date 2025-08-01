@@ -1,10 +1,10 @@
-import axios from 'axios';
-import { z } from 'zod';
+import axios from "axios";
+import { z } from "zod";
 
 export enum ProtocolEnum {
-  HTTP = 'http',
-  HTTPS = 'https'
-};
+  HTTP = "http",
+  HTTPS = "https",
+}
 
 export type Protocol = ProtocolEnum | null;
 
@@ -28,13 +28,12 @@ export type Log = {
 
 export const CreateApiSchema = z.object({
   name: z.string().nonempty(),
-  protocol: z
-    .enum(ProtocolEnum),
+  protocol: z.enum(ProtocolEnum),
   domain: z
     .string()
     .regex(
       /^(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,}$/,
-      "Must be a valid domain."
+      "Must be a valid domain.",
     ),
   endpoint: z
     .string()
@@ -50,13 +49,12 @@ export type CreateApiInput = z.infer<typeof CreateApiSchema>;
 export const EditApiSchema = z.object({
   id: z.coerce.number(),
   name: z.string().nonempty(),
-  protocol: z
-    .enum(ProtocolEnum),
+  protocol: z.enum(ProtocolEnum),
   domain: z
     .string()
     .regex(
       /^(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,}$/,
-      "Must be a valid domain."
+      "Must be a valid domain.",
     ),
   endpoint: z
     .string()
@@ -71,16 +69,16 @@ export type EditApiInput = z.infer<typeof EditApiSchema>;
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  timeout: 5000
+  timeout: 5000,
 });
 
 export const fetchApiList = async (): Promise<Api[]> => {
-  const response = await api.get<Api[]>('/apis');
+  const response = await api.get<Api[]>("/apis");
   return response.data;
 };
 
 export const createApi = async (apiData: CreateApiInput): Promise<Api> => {
-  const response = await api.post<Api>('/api', apiData);
+  const response = await api.post<Api>("/api", apiData);
   return response.data;
 };
 
@@ -88,13 +86,13 @@ export const deleteApi = async (apiId: number): Promise<boolean> => {
   try {
     await api.delete<boolean>(`/api/${apiId}`);
     return true;
-  } catch(error) {
+  } catch (error) {
     return false;
   }
 };
 
 export const editApi = async (apiData: EditApiInput): Promise<Api> => {
-  const response = await api.put<Api>('/api', apiData);
+  const response = await api.put<Api>("/api", apiData);
   return response.data;
 };
 
@@ -123,4 +121,13 @@ export const getLastLog = async (apiData: Api): Promise<Log | null> => {
   } catch (error) {
     return null;
   }
-}
+};
+
+export const getLogs = async (apiData: Api): Promise<Log[]> => {
+  try {
+    const response = await api.get(`/logs/${apiData.id}`);
+    return response.data;
+  } catch (error) {
+    return [];
+  }
+};

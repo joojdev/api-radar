@@ -1,5 +1,11 @@
-import React, { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
-import { fetchApiList, type Api } from '../api';
+import React, {
+  createContext,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { fetchApiList, type Api, type Log } from "../api";
 
 interface AppContextType {
   apiList: Api[];
@@ -13,18 +19,16 @@ interface AppContextType {
   setCurrentPopup: React.Dispatch<React.SetStateAction<Popup>>;
   dropDownSelected: number | null;
   setDropDownSelected: React.Dispatch<React.SetStateAction<number | null>>;
-  currentStatus: number | null;
-  setCurrentStatus: React.Dispatch<React.SetStateAction<number | null>>;
-  currentResponseTime: number | null;
-  setCurrentResponseTime: React.Dispatch<React.SetStateAction<number | null>>;
-};
+  currentLogList: Log[] | null;
+  setCurrentLogList: React.Dispatch<React.SetStateAction<Log[]>>;
+}
 
 export enum Popup {
   NONE,
   NEW_API,
   EDIT_API,
-  DELETE_API
-};
+  DELETE_API,
+}
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -35,8 +39,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<Error | null>(null);
   const [currentPopup, setCurrentPopup] = useState<Popup>(Popup.NONE);
   const [dropDownSelected, setDropDownSelected] = useState<number | null>(null);
-  const [currentStatus, setCurrentStatus] = useState<number | null>(null);
-  const [currentResponseTime, setCurrentResponseTime] = useState<number | null>(null);
+  const [currentLogList, setCurrentLogList] = useState<Log[]>([]);
 
   useEffect(() => {
     let mounted = true;
@@ -45,19 +48,37 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
       try {
         const list = await fetchApiList();
         if (mounted) setApiList(list);
-      } catch(err) {
+      } catch (err) {
         if (mounted) setError(err as Error);
       } finally {
         if (mounted) setLoading(false);
       }
     })();
 
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return (
-    <AppContext.Provider value={{ apiList, setApiList, loading, setLoading, error, selectedApi, setSelectedApi, currentPopup, setCurrentPopup, dropDownSelected, setDropDownSelected, setCurrentResponseTime, currentResponseTime, setCurrentStatus, currentStatus }}>
-      { children }
+    <AppContext.Provider
+      value={{
+        apiList,
+        setApiList,
+        loading,
+        setLoading,
+        error,
+        selectedApi,
+        setSelectedApi,
+        currentPopup,
+        setCurrentPopup,
+        dropDownSelected,
+        setDropDownSelected,
+        setCurrentLogList,
+        currentLogList,
+      }}
+    >
+      {children}
     </AppContext.Provider>
   );
 }
@@ -66,7 +87,9 @@ export function useAppContext(): AppContextType {
   const context = useContext(AppContext);
 
   if (!context) {
-    throw new Error('useAppContext needs to be used inside of AppContextProvider!');
+    throw new Error(
+      "useAppContext needs to be used inside of AppContextProvider!",
+    );
   }
 
   return context;

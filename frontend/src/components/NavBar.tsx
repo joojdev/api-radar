@@ -1,6 +1,6 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './NavBar.css';
-import { Popup, useAppContext } from '../hooks/useAppContext';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "./NavBar.css";
+import { Popup, useAppContext } from "../hooks/useAppContext";
 
 export default function NavBar() {
   const { setCurrentPopup } = useAppContext();
@@ -12,7 +12,9 @@ export default function NavBar() {
   return (
     <nav>
       <h1>API Radar</h1>
-      <button onClick={handleCreateApi}><FontAwesomeIcon icon={["fajr", "plus"]} /></button>
+      <button onClick={handleCreateApi}>
+        <FontAwesomeIcon icon={["fajr", "plus"]} />
+      </button>
     </nav>
   );
 }

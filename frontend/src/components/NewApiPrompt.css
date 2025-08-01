@@ -40,7 +40,7 @@ span.error {
   height: 30px;
   border-radius: 5px;
   cursor: pointer;
-  transition: .2s;
+  transition: 0.2s;
 }
 
 .closeButton:hover {
@@ -55,14 +55,15 @@ span.error {
   box-shadow: none;
 }
 
-input, select {
+input,
+select {
   padding: 15px 30px;
   border-radius: 5px;
   border: 1px solid #d3d3d3;
   font-size: 1em;
 }
 
-input[type=range] {
+input[type="range"] {
   width: 100%;
 }
 
@@ -81,7 +82,7 @@ input[type=range] {
   border: 1px solid rgb(91, 168, 91);
   box-shadow: 0 6px 10px #33333349;
   cursor: pointer;
-  transition: .2s;
+  transition: 0.2s;
 }
 
 .submitButton:hover {
