@@ -24,7 +24,7 @@
 
 .title > h2 {
   font-size: 3.2em;
-  word-break: break-all;
+  word-wrap: break-word;
   margin: 0 50px;
 }
 
