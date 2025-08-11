@@ -4,8 +4,10 @@ import React, {
   useContext,
   useEffect,
   useState,
+  useRef,
 } from "react";
 import { fetchApiList, type Api, type Log } from "../api";
+import { io, Socket } from "socket.io-client";
 
 interface AppContextType {
   apiList: Api[];
@@ -21,6 +23,7 @@ interface AppContextType {
   setDropDownSelected: React.Dispatch<React.SetStateAction<number | null>>;
   currentLogList: Log[] | null;
   setCurrentLogList: React.Dispatch<React.SetStateAction<Log[]>>;
+  socket: Socket | null;
 }
 
 export enum Popup {
@@ -32,6 +35,21 @@ export enum Popup {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
+function useSocket(url: string, options?: any): Socket | null {
+  const socketRef = useRef<Socket | null>(null);
+
+  useEffect(() => {
+    const socket = io(url, options);
+    socketRef.current = socket;
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [url, options]);
+
+  return socketRef.current;
+}
+
 export function AppContextProvider({ children }: { children: ReactNode }) {
   const [selectedApi, setSelectedApi] = useState<Api | null>(null);
   const [apiList, setApiList] = useState<Api[]>([]);
@@ -40,6 +58,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   const [currentPopup, setCurrentPopup] = useState<Popup>(Popup.NONE);
   const [dropDownSelected, setDropDownSelected] = useState<number | null>(null);
   const [currentLogList, setCurrentLogList] = useState<Log[]>([]);
+
+  const socket = useSocket(import.meta.env.VITE_API_BASE_URL);
 
   useEffect(() => {
     let mounted = true;
@@ -76,6 +96,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         setDropDownSelected,
         setCurrentLogList,
         currentLogList,
+        socket,
       }}
     >
       {children}
@@ -88,7 +109,7 @@ export function useAppContext(): AppContextType {
 
   if (!context) {
     throw new Error(
-      "useAppContext needs to be used inside of AppContextProvider!",
+      "useAppContext needs to be used inside of AppContextProvider!"
     );
   }
 

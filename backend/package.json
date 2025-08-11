@@ -1,12 +1,12 @@
 {
   "name": "backend",
   "scripts": {
-    "devServer": "tsx watch src/server.js",
-    "devTask": "tsx watch src/task/index.js",
+    "devServer": "tsx watch src/server.ts",
+    "devTask": "tsx watch src/task/index.ts",
     "build": "tsc",
     "startServer": "node dist/server.js",
     "startTask": "node dist/task/index.js",
-    "populateDb": "ts-node src/scripts/populate_db.ts",
+    "populateDb": "tsx src/scripts/populate_db.ts",
     "format": "prettier --write ."
   },
   "author": "joojdev",
@@ -21,6 +21,7 @@
     "dotenv": "^17.2.0",
     "fastify": "^5.4.0",
     "node-schedule": "^2.1.1",
+    "socket.io": "^4.8.1",
     "zod": "^4.0.5"
   },
   "devDependencies": {
@@ -28,6 +29,7 @@
     "@types/concurrently": "^6.4.0",
     "@types/dotenv": "^6.1.1",
     "@types/node": "^24.1.0",
+    "@types/socket.io": "^3.0.1",
     "prettier": "^3.6.2",
     "prisma": "^6.13.0",
     "tsx": "^4.20.3",
