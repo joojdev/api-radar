@@ -26,15 +26,15 @@ const CreateApiSchema = z.object({
 });
 
 const ChangeApiStateSchema = z.object({
-  apiId: z.coerce.number(),
+  apiId: z.uuidv4(),
 });
 
 const DeleteApiSchema = z.object({
-  apiId: z.coerce.number(),
+  apiId: z.uuidv4(),
 });
 
 const EditApiSchema = z.object({
-  id: z.coerce.number(),
+  id: z.uuidv4(),
   protocol: z.enum(Protocol),
   domain: z
     .string()
@@ -158,9 +158,7 @@ const apisRoutes: FastifyPluginAsync = async (app) => {
     const parsed = ChangeApiStateSchema.safeParse(request.params);
 
     if (!parsed.success)
-      return response.badRequest(
-        'Invalid parameter. "apiId" must be a number.',
-      );
+      return response.badRequest('Invalid parameter. "apiId" must be an UUID.');
 
     try {
       await app.prisma.api.update({
@@ -191,9 +189,7 @@ const apisRoutes: FastifyPluginAsync = async (app) => {
     const parsed = ChangeApiStateSchema.safeParse(request.params);
 
     if (!parsed.success)
-      return response.badRequest(
-        'Invalid parameter. "apiId" must be a number.',
-      );
+      return response.badRequest('Invalid parameter. "apiId" must be an UUID.');
 
     try {
       await app.prisma.api.update({

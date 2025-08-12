@@ -3,7 +3,12 @@ import { z } from "zod";
 import { Log } from "../../generated/prisma";
 
 const SelectLogsSchema = z.object({
-  apiId: z.coerce.number(),
+  apiId: z.uuidv4(),
+});
+
+const SelectByTimestampSchema = z.object({
+  apiId: z.uuidv4(),
+  timestamp: z.coerce.number().transform((value) => new Date(value)),
 });
 
 const logsRoutes: FastifyPluginAsync = async (app) => {
@@ -11,9 +16,7 @@ const logsRoutes: FastifyPluginAsync = async (app) => {
     const parsed = SelectLogsSchema.safeParse(request.params);
 
     if (!parsed.success)
-      return response.badRequest(
-        'Invalid parameter. "apiId" must be a number.',
-      );
+      return response.badRequest('Invalid parameter. "apiId" must be an UUID.');
 
     return app.prisma.log.findMany({
       where: {
@@ -29,11 +32,9 @@ const logsRoutes: FastifyPluginAsync = async (app) => {
     const parsed = SelectLogsSchema.safeParse(request.params);
 
     if (!parsed.success)
-      return response.badRequest(
-        'Invalid parameter. "apiId" must be a number.',
-      );
+      return response.badRequest('Invalid parameter. "apiId" must be an UUID.');
 
-    const logs: Log[] = await app.prisma.log.findMany({
+    const log: Log | null = await app.prisma.log.findFirst({
       where: {
         apiId: parsed.data.apiId,
       },
@@ -42,8 +43,32 @@ const logsRoutes: FastifyPluginAsync = async (app) => {
       },
     });
 
-    if (!logs) return response.notFound("This API doesn't have any log!");
-    return logs[0];
+    if (!log) return response.notFound("No Logs found yet.");
+    return log;
+  });
+
+  app.get("/logs/since/:apiId/:timestamp", async (request, response) => {
+    const parsed = SelectByTimestampSchema.safeParse(request.params);
+
+    if (!parsed.success)
+      return response.badRequest(
+        'Invalid parameters. "apiId" and "timestamp" must be UUID and number, respectively.',
+      );
+
+    const logs: Log[] = await app.prisma.log.findMany({
+      where: {
+        apiId: parsed.data.apiId,
+        timestamp: {
+          gt: parsed.data.timestamp,
+        },
+      },
+      orderBy: {
+        timestamp: "desc",
+      },
+    });
+
+    if (!logs.length) return response.notFound("No Logs found yet.");
+    return response.code(200).send(logs);
   });
 };
 

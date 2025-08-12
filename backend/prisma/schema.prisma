@@ -20,7 +20,7 @@ enum Protocol {
 }
 
 model Api {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid()) @db.Uuid
   name String
   protocol Protocol 
   domain String
@@ -34,11 +34,11 @@ model Api {
 }
 
 model Log {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid()) @db.Uuid
   statusCode Int
   responseTime Int
   timestamp DateTime @db.Timestamp() @default(now())
-  apiId Int
+  apiId String @db.Uuid
 
   api Api @relation(fields: [apiId], references: [id], onDelete: Cascade)
 }
