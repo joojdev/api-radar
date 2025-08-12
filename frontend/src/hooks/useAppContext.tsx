@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { fetchApiList, type Api, type Log } from "../api";
+import { fetchApiList, getLastLogs, type Api, type Log } from "../api";
 
 interface AppContextType {
   apiList: Api[];
@@ -21,6 +21,8 @@ interface AppContextType {
   setDropDownSelected: React.Dispatch<React.SetStateAction<number | null>>;
   currentLogList: Log[] | null;
   setCurrentLogList: React.Dispatch<React.SetStateAction<Log[]>>;
+  lastTimestamp: number | null;
+  setLastTimestamp: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 export enum Popup {
@@ -40,6 +42,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   const [currentPopup, setCurrentPopup] = useState<Popup>(Popup.NONE);
   const [dropDownSelected, setDropDownSelected] = useState<number | null>(null);
   const [currentLogList, setCurrentLogList] = useState<Log[]>([]);
+  const [lastTimestamp, setLastTimestamp] = useState<number | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -48,8 +51,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
       try {
         const list = await fetchApiList();
         if (mounted) setApiList(list);
-      } catch (err) {
-        if (mounted) setError(err as Error);
+      } catch (error) {
+        if (mounted) setError(error as Error);
       } finally {
         if (mounted) setLoading(false);
       }
@@ -60,22 +63,40 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (!selectedApi || !lastTimestamp) return;
+
+      const logs: Log[] = await getLastLogs(selectedApi, lastTimestamp);
+      if (!logs.length) return;
+
+      setCurrentLogList((prev) => [...prev, ...logs]);
+      setLastTimestamp(new Date(logs[logs.length - 1].timestamp).getTime());
+    }, 20 * 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [selectedApi, lastTimestamp]);
+
   return (
     <AppContext.Provider
       value={{
+        error,
         apiList,
         setApiList,
         loading,
         setLoading,
-        error,
         selectedApi,
         setSelectedApi,
         currentPopup,
         setCurrentPopup,
         dropDownSelected,
         setDropDownSelected,
-        setCurrentLogList,
         currentLogList,
+        setCurrentLogList,
+        lastTimestamp,
+        setLastTimestamp,
       }}
     >
       {children}
