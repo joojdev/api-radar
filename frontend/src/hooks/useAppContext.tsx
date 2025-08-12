@@ -80,6 +80,22 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  useEffect(() => {
+    if (!socket) return;
+
+    const handler = (log: Log) => {
+      if (!selectedApi) return;
+
+      setCurrentLogList((prev) => [...prev, log]);
+    };
+
+    socket.on("data", handler);
+
+    return () => {
+      socket.off("data", handler); // clean up
+    };
+  }, [socket, selectedApi]);
+
   return (
     <AppContext.Provider
       value={{
@@ -109,7 +125,7 @@ export function useAppContext(): AppContextType {
 
   if (!context) {
     throw new Error(
-      "useAppContext needs to be used inside of AppContextProvider!"
+      "useAppContext needs to be used inside of AppContextProvider!",
     );
   }
 

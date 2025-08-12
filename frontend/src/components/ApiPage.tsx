@@ -59,7 +59,7 @@ export default function ApiPage() {
             name={
               <>
                 <span className="bold">Current Response Time:</span>{" "}
-                {currentLogList[0].responseTime}ms
+                {currentLogList[currentLogList.length - 1].responseTime}ms
               </>
             }
           >
@@ -70,7 +70,9 @@ export default function ApiPage() {
             name={
               <>
                 <span className="bold">Current Status:</span>{" "}
-                {getHttpResponseType(currentLogList[0].statusCode)}
+                {getHttpResponseType(
+                  currentLogList[currentLogList.length - 1].statusCode,
+                )}
               </>
             }
           >

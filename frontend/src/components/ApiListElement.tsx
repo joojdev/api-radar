@@ -16,6 +16,7 @@ export default function ApiListElement({
     dropDownSelected,
     setDropDownSelected,
     setCurrentLogList,
+    socket,
   } = useAppContext();
 
   function checkIfApiIsSelected() {
@@ -23,12 +24,17 @@ export default function ApiListElement({
   }
 
   async function handleClick() {
-    if (checkIfApiIsSelected()) return setSelectedApi(null);
+    if (checkIfApiIsSelected()) {
+      socket?.emit("leaveRoom");
+      return setSelectedApi(null);
+    }
     setSelectedApi(api);
 
     const logs: Log[] = await getLogs(api);
 
     setCurrentLogList(logs);
+
+    socket?.emit("joinRoom", `api_${api.id}`);
   }
 
   function handleDropdownClick(event: React.MouseEvent) {
