@@ -6,7 +6,6 @@ import prismaPlugin from "./plugins/prisma";
 import path from "path";
 import Autoload from "@fastify/autoload";
 import cors from "@fastify/cors";
-import socketIOPlugin from "./plugins/socket.io";
 import { fileURLToPath } from "url";
 
 const EnvSchema = z.object({
@@ -20,7 +19,6 @@ const buildServer = () => {
 
   app.register(sensible);
   app.register(prismaPlugin);
-  app.register(socketIOPlugin);
   app.register(cors, {
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],

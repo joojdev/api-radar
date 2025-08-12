@@ -79,23 +79,19 @@ function startCron(prisma: PrismaClient) {
     const currentDate = new Date();
     const currentMinute = Math.round(currentDate.getTime() / (1000 * 60));
 
-    const createdLogIds: number[] = [];
-
     const tasks = apis
       .filter((api) => api.running && currentMinute % api.accessInterval == 0)
       .map(async (api) => {
         const data = await fetchWithMetrics(getFullUrl(api));
 
         try {
-          const log = await prisma.log.create({
+          await prisma.log.create({
             data: {
               responseTime: data.responseTime ?? -1,
               statusCode: data.status ?? -1,
               apiId: api.id,
             },
           });
-
-          createdLogIds.push(log.id);
         } catch (error: any) {
           console.error(
             `[UNHANDLED ERROR] ${api.name}:`,
@@ -106,21 +102,6 @@ function startCron(prisma: PrismaClient) {
 
     try {
       await Promise.allSettled(tasks);
-
-      if (createdLogIds.length > 0) {
-        try {
-          await axios.post(
-            `${process.env.SERVER_URL}/updateCharts`,
-            createdLogIds,
-            {
-              headers: { "Content-Type": "application/json" },
-            },
-          );
-          console.log("Notified server to update charts.");
-        } catch (error) {
-          console.error("Error notifying server:", error);
-        }
-      }
     } finally {
       isRunning = false;
       console.log("Scheduled job finished.");
