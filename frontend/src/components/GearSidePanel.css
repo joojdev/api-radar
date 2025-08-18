@@ -1,0 +1,12 @@
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.rowDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}

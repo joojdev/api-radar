@@ -65,9 +65,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (!selectedApi || !lastTimestamp) return;
+      if (!selectedApi) return;
 
-      const logs: Log[] = await getLastLogs(selectedApi, lastTimestamp);
+      const logs: Log[] = await getLastLogs(selectedApi, lastTimestamp ?? 0);
       if (!logs.length) return;
 
       setCurrentLogList((prev) => [...prev, ...logs]);

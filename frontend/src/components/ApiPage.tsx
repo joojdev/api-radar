@@ -81,7 +81,7 @@ export default function ApiPage() {
         </div>
       )}
 
-      {!currentLogList && (
+      {!currentLogList?.length && (
         <div className="message">There's no data for this API yet.</div>
       )}
 
