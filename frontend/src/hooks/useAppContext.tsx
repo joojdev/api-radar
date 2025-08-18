@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import { fetchApiList, getLastLogs, type Api, type Log } from "../api";
+import { useLocalStorage } from "./useLocalStorage";
 
 interface AppContextType {
   apiList: Api[];
@@ -23,6 +24,8 @@ interface AppContextType {
   setCurrentLogList: React.Dispatch<React.SetStateAction<Log[]>>;
   lastTimestamp: number | null;
   setLastTimestamp: React.Dispatch<React.SetStateAction<number | null>>;
+  secondsBetweenCalls: number;
+  setSecondsBetweenCalls: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export enum Popup {
@@ -43,6 +46,10 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   const [dropDownSelected, setDropDownSelected] = useState<number | null>(null);
   const [currentLogList, setCurrentLogList] = useState<Log[]>([]);
   const [lastTimestamp, setLastTimestamp] = useState<number | null>(null);
+  const [secondsBetweenCalls, setSecondsBetweenCalls] = useLocalStorage<number>(
+    "secondsBetweenCalls",
+    20,
+  );
 
   useEffect(() => {
     let mounted = true;
@@ -72,12 +79,12 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
       setCurrentLogList((prev) => [...prev, ...logs]);
       setLastTimestamp(new Date(logs[logs.length - 1].timestamp).getTime());
-    }, 20 * 1000);
+    }, secondsBetweenCalls * 1000);
 
     return () => {
       clearInterval(interval);
     };
-  }, [selectedApi, lastTimestamp]);
+  }, [selectedApi, lastTimestamp, secondsBetweenCalls]);
 
   return (
     <AppContext.Provider
@@ -97,6 +104,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         setCurrentLogList,
         lastTimestamp,
         setLastTimestamp,
+        secondsBetweenCalls,
+        setSecondsBetweenCalls,
       }}
     >
       {children}
